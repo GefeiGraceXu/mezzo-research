@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.claude/settings.local.json
+
+# Word 源文件不上传，站上只放转换好的 md
+*.docx
+
+.DS_Store
+Thumbs.db
+.env
+.env.production

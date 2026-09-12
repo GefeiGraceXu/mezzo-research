@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import { sections } from '../config/sections.js';
+import { postsInSection, formatDate } from '../lib/posts.js';
+
+export function getStaticPaths() {
+  return sections.map((s) => ({ params: { section: s.id }, props: { s } }));
+}
+
+const { s } = Astro.props;
+const list = s.type === 'column' ? postsInSection(s.id) : [];
+---
+
+<Base title={s.title} description={s.desc}>
+  <a class="back" href="/">← 返回首页</a>
+
+  <div class="page-head">
+    <h1>{s.title}</h1>
+    <p>{s.desc}</p>
+  </div>
+
+  {
+    s.type === 'board' ? (
+      <div class="empty">
+        <div class="big">这一栏还在建设中</div>
+        <div class="small">
+          将来这里会放自动更新的数据看板，数据每天定时抓取后自动发布。
+        </div>
+      </div>
+    ) : list.length === 0 ? (
+      <div class="empty">
+        <div class="big">这一栏还没有文章</div>
+        <div class="small">写好的文章会出现在这里。</div>
+      </div>
+    ) : (
+      <div class="post-list">
+        {list.map((p) => (
+          <a class="post-item" href={`/posts/${p.slug}`}>
+            <h2>{p.title}</h2>
+            {p.summary && <p class="summary">{p.summary}</p>}
+            <div class="date">{formatDate(p.date)}</div>
+          </a>
+        ))}
+      </div>
+    )
+  }
+</Base>

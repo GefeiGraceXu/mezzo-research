@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { sections } from '../config/sections.js';
+import { postsInSection } from '../lib/posts.js';
+
+const cards = sections.map((s) => ({
+  ...s,
+  count: s.type === 'column' ? postsInSection(s.id).length : null,
+}));
+---
+
+<Base>
+  <div class="card-grid">
+    {
+      cards.map((s) => (
+        <a class="card" href={`/${s.id}`}>
+          <div class="card-icon" style={`background: var(--c-${s.color})`}>
+            <Icon name={s.icon} />
+          </div>
+          <div class="card-body">
+            <div class="card-title">
+              {s.title}
+              {s.type === 'board' && <span class="badge">建设中</span>}
+            </div>
+            <div class="card-desc">
+              {s.desc}
+              {s.count > 0 && ` · ${s.count} 篇`}
+            </div>
+          </div>
+          <div class="card-arrow">→</div>
+        </a>
+      ))
+    }
+  </div>
+</Base>

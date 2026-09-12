@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import { posts, formatDate } from '../../lib/posts.js';
+import { getSection } from '../../config/sections.js';
+
+export function getStaticPaths() {
+  return posts.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+}
+
+const { p } = Astro.props;
+const { Content } = p;
+const section = getSection(p.section);
+// 只取二三级标题做目录，四级太碎
+const toc = p.headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<Base title={p.title} description={p.summary}>
+  <a class="back" href={`/${p.section}`}>← {section?.title ?? '返回'}</a>
+
+  <article>
+    <div class="article-head">
+      <h1>{p.title}</h1>
+      {p.summary && <p class="summary">{p.summary}</p>}
+      <div class="meta">{formatDate(p.date)}{section && ` · ${section.title}`}</div>
+    </div>
+
+    <div class="article-layout">
+      <div class="prose">
+        <Content />
+      </div>
+
+      {
+        toc.length > 2 && (
+          <aside class="toc">
+            <div class="toc-title">目录</div>
+            {toc.map((h) => (
+              <a href={`#${h.slug}`} class={h.depth === 3 ? 'lv3' : ''}>
+                {h.text}
+              </a>
+            ))}
+          </aside>
+        )
+      }
+    </div>
+  </article>
+</Base>
