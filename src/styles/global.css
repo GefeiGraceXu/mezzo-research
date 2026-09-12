@@ -120,6 +120,8 @@ main { padding: 40px 0 64px; }
   .card-grid { grid-template-columns: 1fr; }
   .site-header .wrap { height: 72px; }
   .site-header nav { display: none; }
+  /* 窄屏卡片描述换行显示，不要截断成省略号 */
+  .card-desc { white-space: normal; }
 }
 
 .card {
