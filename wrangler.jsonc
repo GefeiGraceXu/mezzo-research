@@ -1,0 +1,11 @@
+{
+  // 部署配置。这个站是纯静态的：Astro 构建出 dist/，
+  // Worker 只负责把 dist/ 里的文件当静态资源发出去，没有服务端逻辑。
+  //
+  // name 必须和 Cloudflare 上的 Worker 名字一致，改名字要两边一起改。
+  "name": "mezzo-research",
+  "compatibility_date": "2026-09-13",
+  "assets": {
+    "directory": "./dist"
+  }
+}
